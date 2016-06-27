@@ -60,7 +60,7 @@ class CoqtopSuccessCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         coqfile_view = manager.file_view
 
-        r = coqfile_view.find(r'(.|\n)*?\.( |\n|$)', manager.current_position)
+        r = coqfile_view.find(r'(.|\n)*?[^.]\.( |\n|$)', manager.current_position)
         text = coqfile_view.substr(r).strip()
 
         if 'keyword.other.coq' in coqfile_view.scope_name(manager.current_position).split(' '):
@@ -99,7 +99,8 @@ class CoqNextStatementCommand(sublime_plugin.TextCommand):
         else:
             manager.expects_result = True
 
-            r = coqfile_view.find(r'(.|\n)*?\.', manager.current_position)
+            r = coqfile_view.find(r'(.|\n)*?[^.]\.(?!\.)', manager.current_position)
+            print("sending " + coqfile_view.substr(r))
             manager.send(coqfile_view.substr(r))
 
 class CoqUndoStatementCommand(sublime_plugin.TextCommand):
